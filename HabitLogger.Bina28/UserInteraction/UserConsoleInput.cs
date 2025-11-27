@@ -4,17 +4,11 @@ namespace HabitLogger.UserInteraction;
 
 public class UserConsoleInput
 {
-    private readonly Validation _validation;
 
-    public UserConsoleInput(Validation validation)
-    {
-        _validation = validation;
-    }
-
-    public int DurationInput()
+    public static int DurationInput()
     {
         int duration;
-        Console.Write("Enter the duration: ");
+        Console.Write("Enter the duration in minutes: ");
         while (!int.TryParse(Console.ReadLine(), out duration))
         {
             Console.WriteLine("Invalid input. Please enter a valid integer for duration.");
@@ -23,48 +17,57 @@ public class UserConsoleInput
         return duration;
     }
 
-    public string DateInput()
+    public static bool GetYesNo(string message)
     {
-        bool isValidInput = false;
-        string date = "";
-        string format = "yyyy-MM-dd";
-        while (!isValidInput)
+        string? input;
+        do
         {
-            Console.WriteLine("Do you want to enter today's day? (y/n)");
-            string userInput = Console.ReadLine().ToLower();
-            if (userInput == "y")
-            {
-                isValidInput = true;
-                date = DateTime.Now.ToString(format);
-            }
-            else if (userInput == "n")
-            {
-                isValidInput = true;
-                Console.Write($"Enter a date ({format}): ");
-                date = Console.ReadLine();
-                while (!_validation.IsValidDate(date))
-                {
-                    Console.WriteLine($"Invalid date format. Please use {format}.");
-                    Console.Write($"Enter a date ({format}): ");
-                    date = Console.ReadLine();
-                }
-            }
-            else
-            {
-                Console.WriteLine("Invalid input! Please enter 'y' or 'n'.");
-            }
+            Console.WriteLine(message);
+            input = Console.ReadLine()?.Trim().ToLower();
+
+            if (input == "y") return true;
+            if (input == "n") return false;
+
+            Console.WriteLine("Invalid input! Please enter 'y' or 'n'.");
         }
-        return date;
+        while (true);
+    }
+    public static string GetValidDate(string format)
+    {
+        string? date;
+
+        do
+        {
+            Console.Write($"Enter a date ({format}): ");
+            date = Console.ReadLine();
+
+            if (!string.IsNullOrEmpty(date) && Validation.IsValidDate(date, format))
+                return date;
+
+            Console.WriteLine($"Invalid date format. Please use {format}.");
+        }
+        while (true);
     }
 
 
-
-
-    public int IdInput()
+    public static string DateInput()
     {
-        int id;
+        string format = "yyyy-MM-dd";
+
+        bool useToday = GetYesNo("Do you want to enter today's day? (y/n)");
+
+        if (useToday)
+            return DateTime.UtcNow.ToString(format);
+
+        return GetValidDate(format);
+    }
+
+
+    public static string IdInput()
+    {
+        string id = "";
         Console.Write("Enter the ID: ");
-        while (!int.TryParse(Console.ReadLine(), out id))
+        while (string.IsNullOrEmpty(id))
         {
             Console.WriteLine("Invalid input. Please enter a valid integer for ID.");
             Console.Write("Enter the ID: ");

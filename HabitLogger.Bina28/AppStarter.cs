@@ -1,53 +1,60 @@
-﻿using HabitLogger.Data;
+﻿using HabitLogger.Services;
 
 namespace HabitLogger;
 
 public class AppStarter
 {
-    private readonly DbRepository _repository;
+    private readonly LoggerService _loggerService;
 
-    public AppStarter(DbRepository repository)
+    public AppStarter(LoggerService loggerService)
     {
-        _repository = repository;
+        _loggerService = loggerService;
     }
     public void Run()
     {
         string? input;
-        bool isValid = false;
+        bool isValid = true;
         do
         {
-            Console.WriteLine(@$"------------------------------------------------
-                MAIN MENU
-                What would you like to do:  
-                0 - {MenuOption.Exit}
-                1 - {MenuOption.View}   
-                2 - {MenuOption.Insert} 
-                3 - {MenuOption.Update}   
-                4 - {MenuOption.Delete}
-         ------------------------------------------------
-                Enter your option: ");
+            Console.Clear();
+            Console.WriteLine(@$"
+MAIN MENU
+What would you like to do:  
+0 - {MenuOption.Exit}
+1 - {MenuOption.View}   
+2 - {MenuOption.Insert} 
+3 - {MenuOption.Update}   
+4 - {MenuOption.Delete}        
+   
+Enter your option: ");
             input = Console.ReadLine();
 
-            switch (input.ToLower())
+            switch (input?.ToLower())
             {
                 case "0":
                     return;
                 case "1":
-                    _repository.View();
+                    _loggerService.View();
                     break;
                 case "2":
-                    _repository.Insert();
+                    _loggerService.Insert();
                     break;
                 case "3":
-                    _repository.Update();
+                    _loggerService.Update();
                     break;
                 case "4":
-                    _repository.Delete();
+                    _loggerService.Delete();
                     break;
                 default:
+                    Console.WriteLine("Invalid option. Try again.");
                     isValid = false;
                     break;
             }
-        } while (string.IsNullOrEmpty(input) || isValid);
+
+
+        } while (string.IsNullOrEmpty(input) || !isValid);
+
+        Console.WriteLine("\nPress ENTER to return to menu...");
+        Console.ReadLine();
     }
 }

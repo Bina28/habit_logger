@@ -1,5 +1,6 @@
 ﻿using HabitLogger.Data;
 using HabitLogger.Helpers;
+using HabitLogger.Services;
 using HabitLogger.UserInteraction;
 
 namespace HabitLogger;
@@ -9,11 +10,14 @@ class Program
     static void Main(string[] args)
     {
         DatabaseManager databaseManager = new();
-        databaseManager.CreateTable();
-        var validation = new Validation();
-        var userInput = new UserConsoleInput(validation);
-        var repository = new DbRepository(validation, userInput);
-        var appStarter = new AppStarter(repository);
+        databaseManager.CreateTable();      
+        var repository = new DbRepository();
+        var service = new LoggerService(repository);
+        var appStarter = new AppStarter(service);
+        while (true)
+        {
         appStarter.Run();
+        }
+
     }
 }
