@@ -4,9 +4,16 @@ namespace HabitLogger.Data;
 
 public class DatabaseManager
 {
-public void CreateTable(string connectionString)
+    private readonly string _connection;
+
+    public DatabaseManager()
+    {
+        _connection = AppConfig.ConnectionString;
+
+    }
+public  void CreateTable()
 	{
-        using var connection = new SqliteConnection(connectionString);
+        using var connection = new SqliteConnection(_connection);
         connection.Open();
 
         var tableCmd = connection.CreateCommand();

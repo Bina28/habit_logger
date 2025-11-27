@@ -1,12 +1,24 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using HabitLogger.Helpers;
+using HabitLogger.UserInteraction;
+using Microsoft.Data.Sqlite;
 
 namespace HabitLogger.Data;
-public class DbHandler
+public class DbRepository
 {
+    private readonly string _connection;
+    private readonly Validation _validation;
+    private readonly UserConsoleInput _userInput;
 
-    private static void ViewData()
+    public DbRepository(Validation  validation, UserConsoleInput userInput)
     {
-        using var db = new SqliteConnection(connectionString);
+        _connection = AppConfig.ConnectionString;
+        _validation = validation;
+        _userInput = userInput;
+
+    }
+    public  void View()
+    {
+        using var db = new SqliteConnection(_connection);
         db.Open();
         string sqlQuery = "SELECT * FROM coding";
         using var cmd = new SqliteCommand(sqlQuery, db);
@@ -18,11 +30,11 @@ public class DbHandler
         }
     }
 
-    private static void InsertData()
+    public  void Insert()
     {
-        string date = DateInput();
-        int duration = DurationInput();
-        using var db = new SqliteConnection(connectionString);
+        string date = _userInput.DateInput();
+        int duration = _userInput.DurationInput();
+        using var db = new SqliteConnection(_connection);
         db.Open();
         string insertQuery = "INSERT INTO coding (Date, Duration) VALUES (@date, @duration)";
         using var cmd = new SqliteCommand(insertQuery, db);
@@ -32,18 +44,18 @@ public class DbHandler
         Console.WriteLine($"\nThe record with the date: {date} and duration: {duration} has been successfully saved to the database.");
     }
 
-    private static void DeleteHistory()
+    public  void Delete()
     {
         Console.WriteLine("To delete a record, please provide the ID of that record.");
-        int id = IdInput();
+        int id =_userInput.IdInput();
 
-        if (!RecordExist(id))
+        if (!_validation.RecordExist(id))
         {
             Console.WriteLine($"No record found with the ID {id}. Update operation cannot be performed.");
             return; // Exit the method if the record doesn't exist
         }
 
-        using var db = new SqliteConnection(connectionString);
+        using var db = new SqliteConnection(_connection);
         db.Open();
         string deleteQuery = "DELETE FROM coding WHERE Id=@id";
         using var cmd = new SqliteCommand(deleteQuery, db);
@@ -52,19 +64,19 @@ public class DbHandler
         Console.WriteLine($"The record with the id: {id} has been successfully deleted from the database.");
     }
 
-    private static void UpdateData()
+    public  void Update()
     {
         Console.WriteLine("To update a record, please provide the ID along with the new values for the date and duration.");
-        int id = IdInput();
-        if (!RecordExist(id))
+        int id = _userInput.IdInput();
+        if (!_validation.RecordExist(id))
         {
             Console.WriteLine($"No record found with the ID {id}. Update operation cannot be performed.");
             return; // Exit the method if the record doesn't exist
         }
-        string date = DateInput();
-        int duration = DurationInput();
+        string date = _userInput.DateInput();
+        int duration =_userInput.DurationInput();
 
-        using var db = new SqliteConnection(connectionString);
+        using var db = new SqliteConnection(_connection);
         db.Open();
 
         string updateQuery = "UPDATE coding SET Date=@date, Duration=@duration WHERE Id=@id";

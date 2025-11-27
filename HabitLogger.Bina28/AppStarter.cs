@@ -4,54 +4,50 @@ namespace HabitLogger;
 
 public class AppStarter
 {
-    DatabaseManager databaseManager = new();
-    databaseManager.CreateTable(connectionString);
-		bool continueOperation = true;
-		while (continueOperation)
-		{
-			Console.WriteLine("------------------------------------------------");
-			Console.WriteLine("MAIN MENU" +
-				"\nWhat would you like to do:   " +
-				" \n0 - Close application   " +
-				" \n1 - View all data   " +
-				" \n2 - Insert new record   " +
-				" \n3 - Update record   " +
-				" \n4 - Delete record\n");
-			Console.WriteLine("------------------------------------------------");
-			Console.Write("Enter your option: ");
-			string? input = Console.ReadLine();
-    Console.WriteLine();
-			switch (input.ToLower())
-			{
-				case "0":
-					continueOperation = false;
-					break;
-				case "1":
-					ViewData();
-					break;
-				case "2":
-					InsertData();
-					break;
-				case "3":
-					UpdateData();
-					break;
-				case "4":
-					DeleteHistory();
-					break;
-				default:
-					Console.WriteLine("Invalid option, please try again.");
-					break;
-			}
+    private readonly DbRepository _repository;
 
-			if (continueOperation) // Only ask if we haven't chosen to exit
-			{
-				Console.WriteLine("\nDo you want to perform another operation? (y/n)");
-				string userResponse = Console.ReadLine().ToLower();
-				if (userResponse != "y")
-				{
-					continueOperation = false;
-				}
-				Console.Clear();
-			}
-		}
+    public AppStarter(DbRepository repository)
+    {
+        _repository = repository;
+    }
+    public void Run()
+    {
+        string? input;
+        bool isValid = false;
+        do
+        {
+            Console.WriteLine(@$"------------------------------------------------
+                MAIN MENU
+                What would you like to do:  
+                0 - {MenuOption.Exit}
+                1 - {MenuOption.View}   
+                2 - {MenuOption.Insert} 
+                3 - {MenuOption.Update}   
+                4 - {MenuOption.Delete}
+         ------------------------------------------------
+                Enter your option: ");
+            input = Console.ReadLine();
+
+            switch (input.ToLower())
+            {
+                case "0":
+                    return;
+                case "1":
+                    _repository.View();
+                    break;
+                case "2":
+                    _repository.Insert();
+                    break;
+                case "3":
+                    _repository.Update();
+                    break;
+                case "4":
+                    _repository.Delete();
+                    break;
+                default:
+                    isValid = false;
+                    break;
+            }
+        } while (string.IsNullOrEmpty(input) || isValid);
+    }
 }

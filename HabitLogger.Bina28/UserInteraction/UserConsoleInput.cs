@@ -1,9 +1,17 @@
-﻿namespace HabitLogger.UserInteraction;
+﻿using HabitLogger.Helpers;
 
-public class UserInteraction
+namespace HabitLogger.UserInteraction;
+
+public class UserConsoleInput
 {
+    private readonly Validation _validation;
 
-    private static int DurationInput()
+    public UserConsoleInput(Validation validation)
+    {
+        _validation = validation;
+    }
+
+    public int DurationInput()
     {
         int duration;
         Console.Write("Enter the duration: ");
@@ -15,7 +23,7 @@ public class UserInteraction
         return duration;
     }
 
-    private static string DateInput()
+    public string DateInput()
     {
         bool isValidInput = false;
         string date = "";
@@ -34,7 +42,7 @@ public class UserInteraction
                 isValidInput = true;
                 Console.Write($"Enter a date ({format}): ");
                 date = Console.ReadLine();
-                while (!IsValidDate(date))
+                while (!_validation.IsValidDate(date))
                 {
                     Console.WriteLine($"Invalid date format. Please use {format}.");
                     Console.Write($"Enter a date ({format}): ");
@@ -52,7 +60,7 @@ public class UserInteraction
 
 
 
-    private static int IdInput()
+    public int IdInput()
     {
         int id;
         Console.Write("Enter the ID: ");
