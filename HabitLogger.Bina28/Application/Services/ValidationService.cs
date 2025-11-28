@@ -1,6 +1,5 @@
-﻿namespace HabitLogger.Helpers;
-public class Validation
-{
+﻿namespace HabitLogger.Application.Services;
+public class ValidationService{
 
     public static bool IsValidDate(string date, string format)
     {

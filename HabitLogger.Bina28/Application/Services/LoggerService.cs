@@ -1,7 +1,8 @@
-﻿using HabitLogger.Data;
-using HabitLogger.UserInteraction;
+﻿using HabitLogger.Application.Interfaces;
+using HabitLogger.Data;
+using HabitLogger.UI;
 
-namespace HabitLogger.Services;
+namespace HabitLogger.Application.Services;
 
 public class LoggerService : ILoggerService
 {
@@ -58,9 +59,10 @@ public class LoggerService : ILoggerService
         string id = UserConsoleInput.IdInput();
         string date = UserConsoleInput.DateInput();
         int duration = UserConsoleInput.DurationInput();
+
         bool success = _repository.Update(id, date, duration);
         Console.WriteLine(success ?
-    "Record updated successfully."
+      "Record updated successfully."
     : "Failed to update record.");
 
     }

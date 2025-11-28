@@ -1,6 +1,4 @@
-﻿using HabitLogger.Helpers;
-using HabitLogger.Models;
-using HabitLogger.UserInteraction;
+﻿using HabitLogger.Domain.Models;
 using Microsoft.Data.Sqlite;
 
 namespace HabitLogger.Data;
@@ -8,16 +6,13 @@ public class DbRepository
 {
     private readonly string _connection;
 
-
     public DbRepository()
     {
         _connection = AppConfig.ConnectionString;
-     
-
     }
-    public List<HabitRecords> GetAll()
+    public List<HabitRecord> GetAll()
     {
-        var records = new List<HabitRecords>();
+        var records = new List<HabitRecord>();
         using var db = new SqliteConnection(_connection);
         db.Open();
         string sqlQuery = "SELECT * FROM coding";
@@ -26,7 +21,7 @@ public class DbRepository
         while (reader.Read())
         {
 
-            records.Add(new HabitRecords
+            records.Add(new HabitRecord
             {
                 Id = reader["Id"].ToString()!,
                 Date = reader["Date"].ToString()!,

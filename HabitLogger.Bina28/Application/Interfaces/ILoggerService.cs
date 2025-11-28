@@ -1,4 +1,4 @@
-﻿namespace HabitLogger.Services;
+﻿namespace HabitLogger.Application.Interfaces;
 
 public interface ILoggerService
 {

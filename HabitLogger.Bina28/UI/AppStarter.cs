@@ -1,6 +1,7 @@
-﻿using HabitLogger.Services;
+﻿using HabitLogger.Application.Services;
+using HabitLogger.Domain.Enums;
 
-namespace HabitLogger;
+namespace HabitLogger.UI;
 
 public class AppStarter
 {

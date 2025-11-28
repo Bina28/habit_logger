@@ -1,4 +1,4 @@
-﻿namespace HabitLogger;
+﻿namespace HabitLogger.Domain.Enums;
 
 public enum MenuOption
 {

@@ -2,11 +2,11 @@
 
 namespace HabitLogger.Data;
 
-public class DatabaseManager
+public class DbInitializer
 {
     private readonly string _connection;
 
-    public DatabaseManager()
+    public DbInitializer()
     {
         _connection = AppConfig.ConnectionString;
 

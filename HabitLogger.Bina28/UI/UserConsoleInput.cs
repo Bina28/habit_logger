@@ -1,6 +1,6 @@
-﻿using HabitLogger.Helpers;
+﻿using HabitLogger.Application.Services;
 
-namespace HabitLogger.UserInteraction;
+namespace HabitLogger.UI;
 
 public class UserConsoleInput
 {
@@ -25,6 +25,7 @@ public class UserConsoleInput
             Console.WriteLine(message);
             input = Console.ReadLine()?.Trim().ToLower();
 
+            
             if (input == "y") return true;
             if (input == "n") return false;
 
@@ -41,7 +42,7 @@ public class UserConsoleInput
             Console.Write($"Enter a date ({format}): ");
             date = Console.ReadLine();
 
-            if (!string.IsNullOrEmpty(date) && Validation.IsValidDate(date, format))
+            if (!string.IsNullOrEmpty(date) && ValidationService.IsValidDate(date, format))
                 return date;
 
             Console.WriteLine($"Invalid date format. Please use {format}.");
@@ -65,8 +66,9 @@ public class UserConsoleInput
 
     public static string IdInput()
     {
-        string id = "";
+
         Console.Write("Enter the ID: ");
+        string? id = Console.ReadLine();
         while (string.IsNullOrEmpty(id))
         {
             Console.WriteLine("Invalid input. Please enter a valid integer for ID.");

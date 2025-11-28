@@ -1,6 +1,6 @@
-﻿namespace HabitLogger.Models;
+﻿namespace HabitLogger.Domain.Models;
 
-public class HabitRecords
+public class HabitRecord
 {
     public required string Id { get; set; }
     public required string Date { get; set; }
